@@ -14,7 +14,7 @@ from sqlalchemy import create_engine
 from pandas.io import sql
 import threading
 
-conn_company_classified = pymysql.connect(user='root', passwd='cqychen882625',host='localhost', db='companyclassified',charset='utf8')
+conn_company_classified = pymysql.connect(user='root', passwd='cqychen123!@#',host='localhost', db='companyclassified',charset='utf8')
 
 def company_industry_data():    
     #下载加载行业分类数据

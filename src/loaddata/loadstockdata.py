@@ -16,7 +16,7 @@ from sqlalchemy import create_engine
 from pandas.io import sql
 import threading
 #获取股票代码和股票名称
-conn = pymysql.connect(user='root', passwd='cqychen882625',host='localhost', db='stock',charset='utf8')
+conn = pymysql.connect(user='root', passwd='cqychen123!@#',host='localhost', db='stock',charset='utf8')
 
 
 #mysql_conn = create_engine('mysql://root:cqychen882625@localhost:3306/stock')
