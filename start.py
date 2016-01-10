@@ -4,7 +4,7 @@ Created on 2016年1月4日
 @author: cqychen
 '''
 import time as dt
-import loaddata.loadcompanydata as lc
+import acc_loaddata as ld
 
 if __name__ == '__main__':
     '''
@@ -20,7 +20,8 @@ if __name__ == '__main__':
     '''
     运行代码区域，调用数据下载接口，计算接口，报表短信推送接口。
     '''
-    lc.company_industry_data();
+    ld.load_company_data() #加载基本信息数据
+    ld.load_trade_data()   #加载公司当天交易数据
     '''
     程序运行结束计时
     '''

@@ -18,7 +18,7 @@ import pandas as pd
 from loaddata.loadstockdata import get_stock_code
 
 conn_get_data = pymysql.connect(user='root', passwd='cqychen882625',host='localhost', db='stock',charset='utf8')
-print("===================calculate the quant index================")
+print("===================acc_calculate the quant index================")
 
 def macd_sign(code_name):
     '''
@@ -64,7 +64,7 @@ def macd_sign(code_name):
 
 
 
-print("=================task start,calculate start time==================")
+print("=================task start,calculaacc_calculatetime==================")
 start_time=dt.time()
 start_date_formate=dt.strftime("%Y-%m-%d %H:%M:%S",dt.localtime())
 print("start time is :",start_date_formate," start seconds is :",start_time)
