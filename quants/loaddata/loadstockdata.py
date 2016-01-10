@@ -30,8 +30,9 @@ def get_stock_info():
     rs=sql.read_sql_query(sql=sql_str, con=conn, index_col='code', coerce_float=True)
     return rs
 
-#这里设置一个全局的变量，因为很多地方都要用到，设置全局变量比较方便，当然也可以设置为类，这样封装更好，现在就先这样吧
+#获取股票列表
 stock_info=get_stock_info();
+
 
 def create_stock_info_table (table_name):
     '''
@@ -52,7 +53,6 @@ def drop_stock_info_table(table_name):
             +table_name
     cur=conn.cursor()
     cur.execute(drop_st)
-
 def is_empty_table(table_name):
     '''
             得到表格的行数
@@ -154,7 +154,6 @@ def load_stock_trade_data_order():
             初始化股票交易数据，这里是通过串行抽取数据的，
             多线程因为有点问题， 先采用串行方式，后期进行改造
     '''
-    
     #将日志写入文件
     start_date_formate=dt.strftime("%Y-%m-%d %H:%M:%S",dt.localtime())
     logdate=dt.strftime("%Y%m%d",dt.localtime())
@@ -166,12 +165,13 @@ def load_stock_trade_data_order():
     errorfileop=open(errorlog, mode='w')
     errorfileop.write("start time is :"+start_date_formate)
     #开始进行顺序加载
+
     rs=stock_info.index;
     total_num=len(rs);
     tempnum=1;
     for stock_code in rs:
-        startstr="stock code is:"+stock_code+"there are:"+total_num+" task"+" this is the number:"+tempnum,"finished:"+tempnum/total_num+"\n"
-        #startstr=["stock code is:",stock_code,"start count is:",'%d' % is_empty_table(stock_code),"there are:",'%d' % total_num," task"," this is the number:",'%d' % tempnum,"finished:",'%d' % (tempnum/total_num),"\n"]
+        #startstr="stock code is:"+stock_code+"there are:"+total_num+" task"+" this is the number:"+tempnum,"finished:"+tempnum/total_num+"\n"
+        startstr=["stock code is:",stock_code,"there are:",'%d' % total_num," task"," this is the number:",'%d' % tempnum,"finished:",'%d' % (tempnum/total_num),"\n"]
         if(0==inital_stock_data(stock_code)):
             errorfileop.writelines(stock_code+"发生错误") 
         print("stock code is:",stock_code,"there are:",total_num," task"," this is the number:",tempnum,"finished:",tempnum/total_num)
@@ -185,46 +185,3 @@ def load_stock_trade_data_order():
     errorfileop.write("end time is :"+end_date_formate)
     errorfileop.close()
 
-
-
-'''
-#运行区域-------------------------
-
-#如下是进行顺序执行的代码。
-'''
-#将程序执行情况输出到文件中，方便日志查看.
-'''
-
-
-logdate=dt.strftime("%Y%m%d",dt.localtime())
-basicloadlog="E:/logs/loaddatalog/loadbasicstockdata"+logdate+".txt";
-fileop=open(basicloadlog, mode='w')
-fileop.write("start time is :"+start_date_formate)
-
-stock_code_res=get_stock_code();
-total_num=len(stock_code_res);
-tempnum=1;
-for stock_code in stock_code_res:
-    #startstr="stock code is:"+stock_code[0]+"start count is:"+is_empty_table(stock_code[0])+"there are:"+total_num+" task"+" this is the number:"+tempnum,"finished:"+tempnum/total_num+"\n"
-    startstr=["stock code is:",stock_code[0],"start count is:",'%d' % is_empty_table(stock_code[0]),"there are:",'%d' % total_num," task"," this is the number:",'%d' % tempnum,"finished:",'%d' % (tempnum/total_num),"\n"]
-    fileop.writelines(startstr)
-    print("stock code is:",stock_code[0],"start count is:",is_empty_table(stock_code[0]),"there are:",total_num," task"," this is the number:",tempnum,"finished:",tempnum/total_num)
-    inital_stock_data(stock_code[0])
-    print("stock code is",stock_code[0],"end count is :",is_empty_table(stock_code[0]),"there are:",total_num," task"," this is the number:",tempnum,"finished:",tempnum/total_num)
-    tempnum=tempnum+1;
-
-#采用while循环不断检测表格数据。没有拉入的数据重新进行拉取。
-#首先进行初始化操作，对股票代码列表
-
-#采用多线程进行抽取数据，如果因为网络出现问，那么将会循环抽取直到数据完全过来。
-
-
-#inital_data(stock_code_list)
-  
-'''    
-
-'''
-fileop.write("end time is :"+end_date_formate)
-fileop.close();
-'''
-#==========================================================================================================================

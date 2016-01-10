@@ -15,10 +15,16 @@ from sqlalchemy import create_engine
 from pandas.io import sql
 import threading
 import pandas as pd
-from loaddata.loadstockdata import get_stock_code
+import loaddata.loadstockdata as ld
 
-conn_get_data = pymysql.connect(user='root', passwd='cqychen882625',host='localhost', db='stock',charset='utf8')
-print("===================acc_calculate the quant index================")
+conn_get_data = pymysql.connect(user='root', passwd='cqychen123!@#',host='localhost', db='stock',charset='utf8')
+real_data_close=ts.get_today_all().set_index(keys='code')
+
+
+def get_realtime_data_close(stock_code):
+    get_str="select  * from basic_"+stock_code+ " order by `date`";
+    rs=sql.read_frame(get_str,conn_get_data);
+    
 
 def macd_sign(code_name):
     '''
@@ -26,6 +32,7 @@ def macd_sign(code_name):
     '''
     get_str="select  * from basic_"+code_name+ " order by `date`";
     rs=sql.read_frame(get_str,conn_get_data);
+    #计算macd值
     ema12=pd.ewma(rs['close'],span=12)
     ema26=pd.ewma(rs['close'],span=26)
     kmacd=ema12-ema26
@@ -36,9 +43,9 @@ def macd_sign(code_name):
     macdlen=len(macdz)
     tempres=pd.Series();
     
-    pre_rs=1;
-    now_rs=1;  
-    sign_buy=True;
+    pre_rs=0;#表示macd柱前一次比较大小的值
+    now_rs=0;#表示现在macd柱比较大小的值
+    sign_buy=False;
     
     for i in range(1,macdlen):  
         if(macdz[i]>macdz[i-1]):
@@ -62,35 +69,37 @@ def macd_sign(code_name):
     return sign_buy;
 
 
-
-
-print("=================task start,calculaacc_calculatetime==================")
-start_time=dt.time()
-start_date_formate=dt.strftime("%Y-%m-%d %H:%M:%S",dt.localtime())
-print("start time is :",start_date_formate," start seconds is :",start_time)
-print("===================================================================")
-
-logdate=dt.strftime("%Y%m%d",dt.localtime())
-basicloadlog="E:/result/macdresult/mackresulttockdata"+logdate+".txt";
-fileop=open(basicloadlog, mode='w')
-fileop.write("start time is :"+start_date_formate)
-
-stock_code_res=get_stock_code()
-for stock_code in stock_code_res:
-    if(macd_sign(stock_code[0])):
-        print(stock_code[0])
-        fileop.writelines(stock_code[0])
-
-
-#============================================================================================================================
-print("===========================task finished,caculate the end time ====================")
-end_time=dt.time()
-end_date_formate=dt.strftime("%Y-%m-%d %H:%M:%S",dt.localtime())
-print("start time is :",end_date_formate," start seconds is :",end_time," the program cost :",end_time-start_time,"seconds")
-print("===================================================================================")
-fileop.write("end time is :"+end_date_formate)
-fileop.close();
-#==========================================================================================================================    
+def macd_res():
+    '''
+    产出macd结果，并将其写入到日志中
+    '''
+    print("=================task start,calculaacc_calculatetime==================")
+    start_time=dt.time()
+    start_date_formate=dt.strftime("%Y-%m-%d %H:%M:%S",dt.localtime())
+    print("start time is :",start_date_formate," start seconds is :",start_time)
+    print("===================================================================")
+    
+    logdate=dt.strftime("%Y%m%d",dt.localtime())
+    basicloadlog="E:/result/macdresult/mackresulttockdata"+logdate+".txt";
+    fileop=open(basicloadlog, mode='w')
+    fileop.write("start time is :"+start_date_formate)
+    
+    stock_code_res=ld.stock_info.index;
+    for stock_code in stock_code_res:
+        if(macd_sign(stock_code)):
+            print(stock_code)
+            fileop.writelines(stock_code)
+    
+    
+    #============================================================================================================================
+    print("===========================task finished,caculate the end time ====================")
+    end_time=dt.time()
+    end_date_formate=dt.strftime("%Y-%m-%d %H:%M:%S",dt.localtime())
+    print("start time is :",end_date_formate," start seconds is :",end_time," the program cost :",end_time-start_time,"seconds")
+    print("===================================================================================")
+    fileop.write("end time is :"+end_date_formate)
+    fileop.close();
+    #==========================================================================================================================    
 
 
 

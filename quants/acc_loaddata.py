@@ -14,3 +14,5 @@ def load_company_data():
     load_company_industry_info()
 def load_trade_data():
     load_stock_trade_data_order()
+ 
+load_company_data()   
