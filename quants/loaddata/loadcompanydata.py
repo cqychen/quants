@@ -110,5 +110,6 @@ def load_company_basic_info():
     except:
         print("公司基本信息数据出错")
 
+
 load_company_basic_info()
 load_company_industry_info()
