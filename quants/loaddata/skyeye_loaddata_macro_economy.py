@@ -11,8 +11,9 @@ from sqlalchemy import create_engine
 from pandas.io import sql
 import threading
 import pandas as pd
-
-
+import sys
+sys.path.append('../') #添加配置文件
+from config import  *
 '''
 抓取宏观经济数据
 '''
@@ -103,18 +104,14 @@ def load_macro_economy():
         print("下载工业品出厂价格指数出错")
 
 if __name__ == '__main__':
-
-    #--------------------设置基本信息---------------------------------
-    print("--------------加载公司分类信息开始-----------------------------")
-    iphost='114.215.165.196'
-    iphost='127.0.0.1'
-    user='root'
-    passwd='cqychen123!@#'
+    print("--------------加载宏观信息开始-----------------------------")
+    startTime=dt.time()
+    iphost,user,passwd=get_mysql_conn()
     db='macro_economy'
     charset='utf8'
     conn_macro_economy = pymysql.connect(user=user, passwd=passwd,host=iphost, db=db,charset=charset)
     #--------------------脚本运行开始--------------------------------
     load_macro_economy()
-
-    print("---------------脚本运行完毕------------------")
+    endTime=dt.time()
+    print("---------------脚本运行完毕,共计耗费时间%sS------------------"%(endTime-startTime))
 
