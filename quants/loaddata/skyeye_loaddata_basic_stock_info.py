@@ -12,7 +12,6 @@ from pandas.io import sql
 import threading
 import pandas as pd;
 
-
 '''
 抓取公司行业等信息
 '''
