@@ -11,6 +11,9 @@ from sqlalchemy import create_engine
 from pandas.io import sql
 import threading
 import pandas as pd;
+import sys
+sys.path.append('../') #添加配置文件
+from config import  *
 
 '''
 抓取公司行业等信息
@@ -106,19 +109,15 @@ def load_company_basic_info():
         print("公司基本信息数据出错")
 
 if __name__ == '__main__':
-
     #--------------------设置基本信息---------------------------------
     print("--------------加载公司分类信息开始-----------------------------")
-    iphost='114.215.165.196'
-    iphost='127.0.0.1'
-    user='root'
-    passwd='cqychen123!@#'
+    startTime=dt.time()
+    iphost,user,passwd=get_mysql_conn()
     db='stock_company'
     charset='utf8'
     conn_stock_company = pymysql.connect(user=user, passwd=passwd,host=iphost, db=db,charset=charset)
-
     #--------------------脚本运行开始--------------------------------
     load_company_basic_info()
     load_company_industry_info()
-
-    print("---------------脚本运行完毕------------------")
+    endTime=dt.time()
+    print("---------------脚本运行完毕,共计耗费时间%sS------------------"%(endTime-startTime))
