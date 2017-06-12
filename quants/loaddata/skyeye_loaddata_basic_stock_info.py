@@ -13,7 +13,7 @@ import threading
 import pandas as pd;
 import sys
 sys.path.append('../') #添加配置文件
-from config import  *
+from common_function import  *
 
 '''
 抓取公司行业等信息

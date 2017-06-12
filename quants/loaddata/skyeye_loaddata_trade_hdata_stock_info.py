@@ -11,19 +11,11 @@ from sqlalchemy import create_engine
 from pandas.io import sql
 import threading
 import pandas as pd
-#获取股票代码和股票名称
 
-#mysql_conn = create_engine('mysql://root:cqychen882625@localhost:3306/stock')
+import sys
+sys.path.append('../') #添加配置文件
+from common_function import  *
 
-def get_stock_info():
-    '''
-            从companyclassified中提取股票信息，这个表会每天进行更新，以获取最新的数据
-            包括股票代码，上市日期，市盈率等信息
-    '''
-    sql_str="SELECT *  FROM  stock_company.`company_basic_info`";
-    rs=sql.read_sql_query(sql=sql_str, con=conn, index_col='code', coerce_float=True)
-    return rs
-#获取股票列表
 
 
 def create_stock_info_table (stock_code):
