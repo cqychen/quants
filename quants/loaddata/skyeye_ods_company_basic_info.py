@@ -15,7 +15,7 @@ import sys
 sys.path.append('../') #添加配置文件
 from common_function import  *
 
-def load_company_basic_info():
+def load_data():
     #下载公司基本信息，包括股票代码、pe、市盈率等数据
     try:
         rs=ts.get_stock_basics()
@@ -34,6 +34,6 @@ if __name__ == '__main__':
     table_name='ods_company_basic_info'
     conn = pymysql.connect(user=user, passwd=passwd,host=iphost, db=db,charset=charset)
     #--------------------脚本运行开始--------------------------------
-    load_company_basic_info()
+    load_data()
     endTime=dt.time()
     print("---------------脚本运行完毕,共计耗费时间%sS------------------"%(endTime-startTime))
