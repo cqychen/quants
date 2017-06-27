@@ -33,6 +33,13 @@ def get_stock_info():
     rs=sql.read_sql_query(sql=sql_str, con=conn, index_col='code', coerce_float=True)
     return rs
 
+def run_mysql_cmd(cmd,conn):
+    cmd=cmd
+    conn=conn
+    cur=conn.cursor()
+    cur.execute(cmd)
+    conn.commit()
+
 
 
 
