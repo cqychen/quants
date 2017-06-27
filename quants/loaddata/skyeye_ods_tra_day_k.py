@@ -19,21 +19,29 @@ def create_table(table_name):
     cmd='''
     create table if not exists %s
     (
-    data_date	    varchar(20)   	COMMENT '数据日期（索引）'
-    ,open_price	    FLOAT	        COMMENT '开盘价'
-    ,close_price	FLOAT	        COMMENT '收盘价'
-    ,high_price	    FLOAT	        COMMENT '最高价'
-    ,low_price	    FLOAT	        COMMENT '最低价'
-    ,volume	        FLOAT	        COMMENT '成交量'
-    ,stock_code	    varchar(10)	    COMMENT '股票代码（索引）和数据日期联合作为主键'
-    ,PRIMARY KEY(stock_code,data_date)
-    ,index(stock_code)
+    `date`	    varchar(20)   	COMMENT '数据日期（索引）'
+    ,`open`	    FLOAT	        COMMENT '开盘价'
+    ,`close`	FLOAT	        COMMENT '收盘价'
+    ,`high`	    FLOAT	        COMMENT '最高价'
+    ,`low`	    FLOAT	        COMMENT '最低价'
+    ,`volume`	        FLOAT	        COMMENT '成交量'
+    ,`code`	    varchar(10)	    COMMENT '股票代码（索引）和数据日期联合作为主键'
+    ,PRIMARY KEY(code,`date`)
+    ,index(code)
     )DEFAULT CHARSET=utf8
     '''%table_name
     print (cmd)
     run_mysql_cmd(cmd,conn)
-def get_data():
 
+def get_data(start_date,end_date):
+    stock_code=get_stock_info().index
+    total_num=len(stock_code);
+    tempnum=1;
+    for tmp_stock_code in stock_code:
+        print(tempnum)
+        tempnum=tempnum+1
+        tmp_rs=ts.get_k_data(code=tmp_stock_code,start=start_date,end=end_date,ktype='D')
+        pd.DataFrame.to_sql(tmp_rs, table_name, con=conn, flavor='mysql', if_exists='append',index=False)
 
 def load_data():
     #下载公司基本信息，包括股票代码、pe、市盈率等数据
@@ -55,6 +63,7 @@ if __name__ == '__main__':
     conn = pymysql.connect(user=user, passwd=passwd,host=iphost, db=db,charset=charset)
     #--------------------脚本运行开始--------------------------------
     create_table(table_name=table_name)
+    get_data('2005-06-23','2017-06-20')
     #load_company_basic_info()
     endTime=dt.time()
     print("---------------脚本运行完毕,共计耗费时间%sS------------------"%(endTime-startTime))
