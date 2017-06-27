@@ -25,7 +25,7 @@ def get_stock_info():
     从companyclassified中提取股票信息，这个表会每天进行更新，以获取最新的数据
     包括股票代码，上市日期，市盈率等信息
     '''
-    sql_str="SELECT *  FROM  stock_company.`ods_company_basic_info`"
+    sql_str="SELECT *  FROM  ods_data.`ods_company_basic_info`"
     iphost, user, passwd = get_mysql_conn()
     db='ods_data'
     charset='utf8'
