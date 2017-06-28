@@ -10,6 +10,7 @@ from sqlalchemy import create_engine
 from pandas.io import sql
 import threading
 import pandas as pd;
+import commands
 
 def get_mysql_conn():
     '''
