@@ -68,7 +68,6 @@ def get_min_date_stock(stock_code):
     from ods_data.ods_tra_day_k
     where code='%s'
     ''' % stock_code
-
     iphost, user, passwd = get_mysql_conn()
     db = 'ods_data'
     charset = 'utf8'
@@ -85,7 +84,7 @@ def get_date_now():
 if __name__ == '__main__':
     #--------------------设置基本信息---------------------------------
     print("--------------main 函数测试-----------------------------")
-    print  get_min_date_stock(stock_code='000001')
+    print get_max_date_stock(stock_code='000002')
     print get_date_add_days('2017-01-01',-1)
     print get_date_now()
 
