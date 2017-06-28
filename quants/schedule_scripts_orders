@@ -1,2 +1,3 @@
-./loaddata/skyeye_ods_company_basic_info.py
-./loaddata/skyeye_ods_tra_day_k.py
+cd /home/cqychen/PycharmProjects/quants/quants/loaddata/
+/home/cqychen/anaconda2/bin/python /home/cqychen/PycharmProjects/quants/quants/loaddata/skyeye_ods_company_basic_info.py
+/home/cqychen/anaconda2/bin/python /home/cqychen/PycharmProjects/quants/quants/loaddata/skyeye_ods_tra_day_k.py
