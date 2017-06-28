@@ -44,8 +44,6 @@ def run_mysql_cmd(cmd,conn):
     cur.execute(cmd)
     conn.commit()
     return cur.fetchall()
-
-
 def get_max_date_stock(stock_code):
     '''
     :param stock_code:输入股票代码 
@@ -62,8 +60,6 @@ def get_max_date_stock(stock_code):
     charset='utf8'
     conn = pymysql.connect(user=user, passwd=passwd,host=iphost, db=db,charset=charset)
     return run_mysql_cmd(cmd, conn)[0][0]
-
-
 def get_min_date_stock(stock_code):
     '''
     :param stock_code:输入股票代码 
@@ -81,10 +77,16 @@ def get_min_date_stock(stock_code):
     conn = pymysql.connect(user=user, passwd=passwd, host=iphost, db=db, charset=charset)
     return run_mysql_cmd(cmd, conn)[0][0]
 
+def get_date_add_days(date,nums):
+    rsdate = int(dt.mktime(datetime.datetime.strptime(date,'%Y-%m-%d').timetuple())) + nums*3600 * 24
+    rsdate = dt.localtime(rsdate)
+    rsdate = dt.strftime("%Y-%m-%d", rsdate)
+    return rsdate
 if __name__ == '__main__':
     #--------------------设置基本信息---------------------------------
     print("--------------main 函数测试-----------------------------")
     print  get_min_date_stock(stock_code='000001')
+    print get_date_add_days('2017-01-01',3)
 
 
 
