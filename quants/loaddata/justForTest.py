@@ -14,6 +14,5 @@ import pandas as pd;
 import sys
 sys.path.append('../') #添加配置文件
 from common_function import  *
-
-print ts.get_today_all()
+print ts.get_k_data('600000',start='2007-01-01',end='2017-06-25')
 
