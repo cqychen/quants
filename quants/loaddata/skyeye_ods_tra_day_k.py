@@ -42,7 +42,6 @@ def load_data():
         print(tempnum,tmp_stock_code,start_date,end_date)
         tmp_rs = ts.get_k_data(code=tmp_stock_code, start=start_date, end=end_date, ktype='D')
         pd.DataFrame.to_sql(tmp_rs, table_name, con=conn, flavor='mysql', if_exists='append', index=False)
-
 if __name__ == '__main__':
     #--------------------设置基本信息---------------------------------
     print("--------------加载股票日k线-----------------------------")
