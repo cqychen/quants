@@ -14,7 +14,6 @@ import pandas as pd;
 import sys
 sys.path.append('../') #添加配置文件
 from common_function import  *
-
 def create_table(table_name):
     cmd='''
     create table if not exists %s
@@ -32,25 +31,17 @@ def create_table(table_name):
     '''%table_name
     print (cmd)
     run_mysql_cmd(cmd,conn)
-
-def get_data(start_date,end_date):
-    stock_code=get_stock_info().index
-    total_num=len(stock_code);
-    tempnum=1;
-    for tmp_stock_code in stock_code:
-        print(tempnum)
-        tempnum=tempnum+1
-        tmp_rs=ts.get_k_data(code=tmp_stock_code,start=start_date,end=end_date,ktype='D')
-        pd.DataFrame.to_sql(tmp_rs, table_name, con=conn, flavor='mysql', if_exists='append',index=False)
-
 def load_data():
-    #下载公司基本信息，包括股票代码、pe、市盈率等数据
-    try:
-        rs=ts.get_stock_basics()
-        pd.DataFrame.to_sql(rs, "ods_company_basic_info", con=conn , flavor='mysql', if_exists='replace',index=True)
-        print("公司基本信息数据ok")
-    except:
-        print("公司基本信息数据出错")
+    stock_code = get_stock_info().index
+    total_num = len(stock_code);
+    tempnum = 1;
+    for tmp_stock_code in stock_code:
+        tempnum = tempnum + 1
+        start_date=get_date_add_days(get_max_date_stock(tmp_stock_code),1) #在最大天数加一天作为日期
+        end_date=get_date_now()
+        print(tempnum,tmp_stock_code,start_date,end_date)
+        tmp_rs = ts.get_k_data(code=tmp_stock_code, start=start_date, end=end_date, ktype='D')
+        pd.DataFrame.to_sql(tmp_rs, table_name, con=conn, flavor='mysql', if_exists='append', index=False)
 
 if __name__ == '__main__':
     #--------------------设置基本信息---------------------------------
@@ -63,7 +54,6 @@ if __name__ == '__main__':
     conn = pymysql.connect(user=user, passwd=passwd,host=iphost, db=db,charset=charset)
     #--------------------脚本运行开始--------------------------------
     create_table(table_name=table_name)
-    get_data('2005-06-23','2017-06-20')
-    #load_company_basic_info()
+    load_data()
     endTime=dt.time()
     print("---------------脚本运行完毕,共计耗费时间%sS------------------"%(endTime-startTime))
