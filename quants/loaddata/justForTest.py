@@ -14,4 +14,6 @@ import pandas as pd;
 import sys
 sys.path.append('../') #添加配置文件
 from common_function import  *
-(status, output)=commands.getstatusoutput(line)
+
+print ts.get_k_data(code='000001', start='2017-01-01', end='2017-07-01', ktype='W')
+
