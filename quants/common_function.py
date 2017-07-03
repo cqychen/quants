@@ -126,7 +126,36 @@ def get_date_add_days(date,nums):
     return rsdate
 def get_date_now():
     return datetime.datetime.now().strftime('%Y-%m-%d')
-
+def get_max_date_index(stock_code):
+    '''
+    :param stock_code:输入股票代码
+    :return: 得到股票代码的最新数据日期
+    '''
+    cmd='''
+    select IFNULL(max(date),'2005-01-01')
+    from ods_data.ods_tra_day_k_index
+    where code='%s'
+    '''%stock_code
+    iphost,user,passwd=get_mysql_conn()
+    db='ods_data'
+    charset='utf8'
+    conn = pymysql.connect(user=user, passwd=passwd,host=iphost, db=db,charset=charset)
+    return run_mysql_cmd(cmd, conn)[0][0]
+def get_min_date_stock_index(stock_code):
+    '''
+    :param stock_code:输入股票代码
+    :return: 得到股票代码的最新数据日期
+    '''
+    cmd = '''
+    select IFNULL(min(date),'2005-01-01')
+    from ods_data.ods_tra_day_k_index
+    where code='%s'
+    ''' % stock_code
+    iphost, user, passwd = get_mysql_conn()
+    db = 'ods_data'
+    charset = 'utf8'
+    conn = pymysql.connect(user=user, passwd=passwd, host=iphost, db=db, charset=charset)
+    return run_mysql_cmd(cmd, conn)[0][0]
 if __name__ == '__main__':
     #--------------------设置基本信息---------------------------------
     print("--------------main 函数测试-----------------------------")

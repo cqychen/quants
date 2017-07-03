@@ -32,15 +32,15 @@ def create_table(table_name):
     print (cmd)
     run_mysql_cmd(cmd,conn)
 def load_data():
-    stock_code = get_stock_info().index
+    stock_code = get_index_info().index
     total_num = len(stock_code);
     tempnum = 1;
     for tmp_stock_code in stock_code:
         tempnum = tempnum + 1
-        start_date=get_date_add_days(get_max_date_stock(tmp_stock_code),1) #在最大天数加一天作为日期
+        start_date=get_date_add_days(get_max_date_index(tmp_stock_code),1) #在最大天数加一天作为日期
         end_date=get_date_now()
         print(tempnum,tmp_stock_code,start_date,end_date)
-        tmp_rs = ts.get_k_data(code=tmp_stock_code, start=start_date, end=end_date, ktype='D')
+        tmp_rs = ts.get_k_data(code=tmp_stock_code, start=start_date, end=end_date,index=True, ktype='D')
         pd.DataFrame.to_sql(tmp_rs, table_name, con=conn, flavor='mysql', if_exists='append', index=False)
 if __name__ == '__main__':
     #--------------------设置基本信息---------------------------------
