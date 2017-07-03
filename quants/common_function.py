@@ -32,6 +32,19 @@ def get_stock_info():
     conn = pymysql.connect(user=user, passwd=passwd,host=iphost, db=db,charset=charset)
     rs=sql.read_sql_query(sql=sql_str, con=conn, index_col='code', coerce_float=True)
     return rs
+def get_index_info():
+    '''
+    从companyclassified中提取股票信息，这个表会每天进行更新，以获取最新的数据
+    包括股票代码，上市日期，市盈率等信息
+    '''
+    sql_str="SELECT *  FROM  ods_data.`ods_classified_index`"
+    iphost, user, passwd = get_mysql_conn()
+    db='ods_data'
+    charset='utf8'
+    conn = pymysql.connect(user=user, passwd=passwd,host=iphost, db=db,charset=charset)
+    rs=sql.read_sql_query(sql=sql_str, con=conn, index_col='code', coerce_float=True)
+    return rs
+
 def run_mysql_cmd(cmd,conn):
     '''
     :param cmd:执行的cmd命令 
@@ -117,9 +130,7 @@ def get_date_now():
 if __name__ == '__main__':
     #--------------------设置基本信息---------------------------------
     print("--------------main 函数测试-----------------------------")
-    print get_max_date_stock(stock_code='000002')
-    print get_date_add_days('2017-01-01',-1)
-    print get_date_now()
+    print get_index_info().index
 
 
 
