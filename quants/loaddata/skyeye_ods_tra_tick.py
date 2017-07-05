@@ -32,17 +32,27 @@ def insert_date():
     f=file(date_file,"w+")
     f.write(now_date)
     f.close()
-def get_stock_tick(stock_code):
+def load_stock_tick(stock_code):
     '''
     :param stock_code:
     :return: 保存每个股票的文件
     '''
     start_date=get_date()
     end_date=dt.strftime('%Y-%m-%d',dt.localtime(dt.time()))
+    path_or_buf=path+'/ods_tra_tick_'+stock_code+'.csv'
     while True:
         if cmp(start_date,end_date)<=0:
-            df = ts.get_tick_data('600848',date='2014-01-09')
-
+            try:
+                df = ts.get_tick_data(stock_code,date=start_date)
+            except:
+                dt.sleep(60)
+                continue
+            if len(df)>3:
+                df['date']=start_date
+                df.to_csv(path_or_buf=path_or_buf,sep=',',mode='a',encoding='utf8',index=False,header=False)
+                start_date=get_date_add_days(start_date,1)
+        else:
+            break
 
 def load_data():
     stock_code = get_stock_info().index
@@ -62,7 +72,6 @@ if __name__ == '__main__':
     path='D:/ods_tra_tick'
     date_file=path+'/date_parameter.txt'
     #--------------------脚本运行开始--------------------------------
-    get_date()
-    insert_date()
+    load_stock_tick('600848')
     endTime=dt.time()
     print("---------------脚本运行完毕,共计耗费时间%sS------------------"%(endTime-startTime))
