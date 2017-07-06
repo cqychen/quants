@@ -25,8 +25,9 @@ def create_table(table_name):
     ,`low`	    FLOAT	        COMMENT '最低价'
     ,`volume`	FLOAT	        COMMENT '成交量'
     ,`code`	    varchar(10)	    COMMENT '股票代码（索引）和数据日期联合作为主键'
-    ,PRIMARY KEY(code,`date`)
-    ,index(code)
+    ,`int_code` varchar(10)	    COMMENT '简洁股票代码'
+    ,PRIMARY KEY(int_code,`date`)
+    ,index(int_code)
     )DEFAULT CHARSET=utf8
     '''%table_name
     print (cmd)
@@ -41,6 +42,7 @@ def load_data():
         end_date=get_date_now()
         print(tempnum,tmp_stock_code,start_date,end_date)
         tmp_rs = ts.get_k_data(code=tmp_stock_code, start=start_date, end=end_date,index=True, ktype='W')
+        tmp_rs['int_code']=tmp_stock_code
         pd.DataFrame.to_sql(tmp_rs, table_name, con=conn, flavor='mysql', if_exists='append', index=False)
 if __name__ == '__main__':
     #--------------------设置基本信息---------------------------------

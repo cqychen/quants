@@ -15,7 +15,6 @@ import sys
 sys.path.append('../') #添加配置文件
 from common_function import  *
 
-df = ts.get_tick_data('600848',date='2014-01-09')
-print len(df)
+df = ts.get_k_data('000001',start='2005-01-01',end='2017-01-01',index=True,ktype='W')
 print df.head(10)
 

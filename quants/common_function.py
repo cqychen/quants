@@ -87,7 +87,6 @@ def get_max_date_stock_w(stock_code):
     charset='utf8'
     conn = pymysql.connect(user=user, passwd=passwd,host=iphost, db=db,charset=charset)
     return run_mysql_cmd(cmd, conn)[0][0]
-
 def get_min_date_stock(stock_code):
     '''
     :param stock_code:输入股票代码 
@@ -118,7 +117,6 @@ def get_min_date_stock_w(stock_code):
     charset = 'utf8'
     conn = pymysql.connect(user=user, passwd=passwd, host=iphost, db=db, charset=charset)
     return run_mysql_cmd(cmd, conn)[0][0]
-
 def get_date_add_days(date,nums):
     rsdate = int(dt.mktime(datetime.datetime.strptime(date,'%Y-%m-%d').timetuple())) + nums*3600 * 24
     rsdate = dt.localtime(rsdate)
@@ -134,7 +132,7 @@ def get_max_date_index(stock_code):
     cmd='''
     select IFNULL(max(date),'2005-01-01')
     from ods_data.ods_tra_day_k_index
-    where code='%s'
+    where int_code='%s'
     '''%stock_code
     iphost,user,passwd=get_mysql_conn()
     db='ods_data'
@@ -164,7 +162,7 @@ def get_max_date_index_w(stock_code):
     cmd='''
     select IFNULL(max(date),'2005-01-01')
     from ods_data.ods_tra_week_k_index
-    where code='%s'
+    where int_code='%s'
     '''%stock_code
     iphost,user,passwd=get_mysql_conn()
     db='ods_data'
