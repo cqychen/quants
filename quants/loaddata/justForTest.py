@@ -15,6 +15,6 @@ import sys
 sys.path.append('../') #添加配置文件
 from common_function import  *
 
-df = ts.get_k_data('000001',start='2005-01-01',end='2017-01-01',index=True,ktype='W')
-print df.head(10)
+df = ts.profit_data(year=2005,top=3000)
+print(len(df))
 
