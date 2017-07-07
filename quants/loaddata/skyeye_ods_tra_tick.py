@@ -39,13 +39,13 @@ def load_stock_tick(stock_code):
     '''
     start_date=get_date()
     end_date=dt.strftime('%Y-%m-%d',dt.localtime(dt.time()))
-    path_or_buf=path+'/ods_tra_tick_'+stock_code+'.gzip'
+    path_or_buf=path+'/ods_tra_tick_'+stock_code+'.csv'
     while True:
         if cmp(start_date,end_date)<=0:
             df = ts.get_tick_data(stock_code,date=start_date,src='tt')
             if df is not None:
                 df['date']=start_date
-                df.to_csv(path_or_buf=path_or_buf,sep=',',mode='a',index=False,header=False,compression='gzip')
+                df.to_csv(path_or_buf=path_or_buf,sep=',',mode='a',encoding='GBK',index=False,header=False)
             start_date=get_date_add_days(start_date,1)
         else:
             break
