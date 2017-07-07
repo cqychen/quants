@@ -21,7 +21,7 @@ def get_date():
     with open(date_file, 'r') as f:  #打开文件
         lines = f.readlines() #读取所有行
         try:
-            return lines[0] #取第一行
+            return lines[0].strip('\n') #取第一行
         except :
             return '2010-01-01'
 def insert_date():
@@ -39,13 +39,13 @@ def load_stock_tick(stock_code):
     '''
     start_date=get_date()
     end_date=dt.strftime('%Y-%m-%d',dt.localtime(dt.time()))
-    path_or_buf=path+'/ods_tra_tick_'+stock_code+'.csv'
+    path_or_buf=path+'/ods_tra_tick_'+stock_code+'.gz'
     while True:
         if cmp(start_date,end_date)<=0:
             df = ts.get_tick_data(stock_code,date=start_date,src='tt')
-            if df is not None:
+            if df is not None and len(df)>=5:
                 df['date']=start_date
-                df.to_csv(path_or_buf=path_or_buf,sep=',',mode='a',encoding='GBK',index=False,header=False)
+                df.to_csv(path_or_buf=path_or_buf,sep=',',mode='a',index=False,header=False,compression='gzip')
             start_date=get_date_add_days(start_date,1)
         else:
             break
@@ -56,18 +56,17 @@ def load_data():
     tempnum = 1;
     for tmp_stock_code in stock_code:
         tempnum = tempnum + 1
-        start_date=get_date_add_days(get_max_date_stock(tmp_stock_code),1) #在最大天数加一天作为日期
-        end_date=get_date_now()
-        print(tempnum,tmp_stock_code,start_date,end_date)
-        tmp_rs = ts.get_k_data(code=tmp_stock_code, start=start_date, end=end_date, ktype='D')
-        pd.DataFrame.to_sql(tmp_rs, table_name, con=conn, flavor='mysql', if_exists='append', index=False)
+	print(tempnum,tmp_stock_code)
+	load_stock_tick(tmp_stock_code)
 if __name__ == '__main__':
     #--------------------设置基本信息---------------------------------
     print("--------------加载股票日k线-----------------------------")
     startTime=dt.time()
-    path='D:/ods_tra_tick'
+    path='/data/ods_tra_tick'
     date_file=path+'/date_parameter.txt'
     #--------------------脚本运行开始--------------------------------
-    load_stock_tick('600848')
+    #load_stock_tick('000001')
+    load_data()
+    insert_date()
     endTime=dt.time()
     print("---------------脚本运行完毕,共计耗费时间%sS------------------"%(endTime-startTime))

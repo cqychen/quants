@@ -172,7 +172,7 @@ def get_max_date_index_w(stock_code):
 if __name__ == '__main__':
     #--------------------设置基本信息---------------------------------
     print("--------------main 函数测试-----------------------------")
-    print get_index_info().index
+    print get_date_add_days('2017-06-20',1)
 
 
 
