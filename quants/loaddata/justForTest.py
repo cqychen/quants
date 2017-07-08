@@ -15,6 +15,6 @@ import sys
 sys.path.append('../') #添加配置文件
 from common_function import  *
 
-df = ts.profit_data(year=2005,top=3000)
-print(len(df))
+df = ts.forecast_data('2014','2')
+print(df.head(10))
 

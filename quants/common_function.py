@@ -182,6 +182,20 @@ def get_max_date_profit_dis():
     charset='utf8'
     conn = pymysql.connect(user=user, passwd=passwd,host=iphost, db=db,charset=charset)
     return run_mysql_cmd(cmd, conn)[0][0]
+def get_max_year_achi_forcast():
+    '''
+    :param stock_code:输入股票代码
+    :return: 得到股票代码的最新数据日期
+    '''
+    cmd='''
+    select IFNULL(max(`year`),'2005')
+    from ods_data.ods_invest_refer_achi_forcast
+    '''
+    iphost,user,passwd=get_mysql_conn()
+    db='ods_data'
+    charset='utf8'
+    conn = pymysql.connect(user=user, passwd=passwd,host=iphost, db=db,charset=charset)
+    return run_mysql_cmd(cmd, conn)[0][0]
 
 def get_date_struct(timestamp=dt.time()):
     (year,mon,day,hour,min,sec,wday,yday,isdst)=dt.localtime(timestamp)
