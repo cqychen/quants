@@ -28,7 +28,6 @@ def create_table(table_name):
     ,`range`         DOUBLE        comment '业绩变动范围'
     ,`year`          VARCHAR (63)  comment '业绩年份'
     ,`quarter`       VARCHAR (63)  comment '业绩季度'
-    ,PRIMARY KEY(code,report_date)
     ,index(code)
     )DEFAULT CHARSET=utf8
     '''%table_name
@@ -41,6 +40,7 @@ def get_data_date(year,quarter):
     rs=ts.forecast_data(year=int(year),quarter=int(quarter))
     rs['year']=year
     rs['quarter']=quarter
+    rs=rs.drop_duplicates() #去除重复的数据，没想到还有重复的，心塞塞，这个api不咋地啊，挖地兔
     pd.DataFrame.to_sql(rs, table_name, con=conn , flavor='mysql', if_exists='append',index=False)
     return rs
 def load_data():
@@ -71,6 +71,5 @@ if __name__ == '__main__':
     #--------------------脚本运行开始--------------------------------
     create_table(table_name=table_name) #建立表格
     load_data()
-    #get_data_date(year='2012')
     endTime=dt.time()
     print("---------------脚本运行完毕,共计耗费时间%sS------------------"%(endTime-startTime))
