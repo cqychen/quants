@@ -11,7 +11,7 @@ from pandas.io import sql
 import threading
 import pandas as pd;
 import commands
-
+import dateutil
 def get_mysql_conn():
     '''
     :return:返回数据库链接信息 
@@ -196,21 +196,36 @@ def get_max_year_achi_forcast():
     charset='utf8'
     conn = pymysql.connect(user=user, passwd=passwd,host=iphost, db=db,charset=charset)
     return run_mysql_cmd(cmd, conn)[0][0]
-
+def get_max_year_table(table_name):
+    '''
+    :param table_name:输入表格名称，获取表格最新的年份，很多业绩、营收等
+    :return:
+    '''
+    cmd='''select IFNULL(max(`year`),'2005') from %s'''%table_name
+    iphost,user,passwd=get_mysql_conn()
+    db='ods_data'
+    charset='utf8'
+    conn = pymysql.connect(user=user, passwd=passwd,host=iphost, db=db,charset=charset)
+    return run_mysql_cmd(cmd, conn)[0][0]
 def get_date_struct(timestamp=dt.time()):
     (year,mon,day,hour,min,sec,wday,yday,isdst)=dt.localtime(timestamp)
     quarter=(mon-1)/3+1
     return (year,quarter,mon,day,hour,min,sec,wday,yday,isdst)
+def get_month_add(date,delta):
+    '''
+    :param date:传入时间格式：yyyy-mm-dd
+    :return:
+    '''
+    date_timestamp=dt.mktime(dt.strptime(date,'%Y-%m-%d'))
+    (year,quarter,mon,day,hour,min,sec,wday,yday,isdst)=get_date_struct(date_timestamp)
+    rs=datetime.datetime(year=year,month=mon,day=day)
+    rs=rs+dateutil.relativedelta.relativedelta(months=delta)
+    return rs
+
 if __name__ == '__main__':
     #--------------------设置基本信息---------------------------------
     print("--------------main 函数测试-----------------------------")
-    print get_date_struct()
-    for mon in range(1,13):
-        quarter=(mon-1)/3+1
-        print (mon,quarter)
-
-
-
+    print get_month_add('2017-07-01',-1)
 
 
 

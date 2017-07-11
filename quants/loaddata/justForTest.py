@@ -15,6 +15,9 @@ import sys
 sys.path.append('../') #添加配置文件
 from common_function import  *
 
-df = ts.forecast_data('2014','2')
-print(df.head(10))
+import datetime
+import dateutil
+z=datetime.datetime(2016,12,17)
+z=z+dateutil.relativedelta.relativedelta(months=2)
 
+print z
