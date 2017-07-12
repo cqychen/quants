@@ -17,7 +17,5 @@ from common_function import  *
 
 import datetime
 import dateutil
-z=datetime.datetime(2016,12,17)
-z=z+dateutil.relativedelta.relativedelta(months=2)
-
-print z
+rs=ts.sz_margins(start='2015-01-01', end='2015-09-19')
+print rs.head(10)
