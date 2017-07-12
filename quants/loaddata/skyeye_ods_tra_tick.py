@@ -28,7 +28,6 @@ def insert_date():
     '''
     :return:将当前日期插入到文件中保存
     '''
-    now_date= dt.strftime('%Y-%m-%d',dt.localtime(dt.time()))
     f=file(date_file,"w+")
     f.write(now_date)
     f.close()
@@ -38,7 +37,6 @@ def load_stock_tick(stock_code):
     :return: 保存每个股票的文件
     '''
     start_date=get_date()
-    end_date=dt.strftime('%Y-%m-%d',dt.localtime(dt.time()))
     path_or_buf=path+'/ods_tra_tick_'+stock_code+'.gz'
     while True:
         if cmp(start_date,end_date)<=0:
@@ -64,6 +62,8 @@ if __name__ == '__main__':
     startTime=dt.time()
     path='/data/ods_tra_tick'
     date_file=path+'/date_parameter.txt'
+    now_date= dt.strftime('%Y-%m-%d',dt.localtime(dt.time()))
+    end_date= dt.strftime('%Y-%m-%d',dt.localtime(dt.time()))
     #--------------------脚本运行开始--------------------------------
     #load_stock_tick('000001')
     load_data()
