@@ -12,6 +12,10 @@ import threading
 import pandas as pd;
 import commands
 import dateutil
+import smtplib
+from email.mime.text import MIMEText
+from email.header import Header
+
 def get_mysql_conn():
     '''
     :return:返回数据库链接信息 
@@ -249,10 +253,30 @@ def get_max_date_sz_margins():
     charset='utf8'
     conn = pymysql.connect(user=user, passwd=passwd,host=iphost, db=db,charset=charset)
     return run_mysql_cmd(cmd, conn)[0][0]
+#发送邮件的函数 参数的意思分别是 发件人邮箱、收件人邮箱、主题、附件、消息内容
+def send_mail(fromAdd, toAdd, subject, attachfile, htmlText):
+  strFrom = fromAdd;
+  strTo = toAdd;
+  msg =MIMEText(htmlText);
+  msg['Content-Type'] = 'Text/HTML';
+  msg['Subject'] = Header(subject,'gb2312');
+  msg['To'] = strTo;
+  msg['From'] = strFrom;
+  #链接QQ邮箱服务器
+  smtp = smtplib.SMTP('smtp.qq.com');
+  #登录您的邮箱
+  smtp.login('1044605016@qq.com','qazwsxedc123');
+  try:
+    #执行发送
+    smtp.sendmail(strFrom,strTo,msg.as_string());
+  finally:
+    smtp.close;
+
+
 if __name__ == '__main__':
     #--------------------设置基本信息---------------------------------
     print("--------------main 函数测试-----------------------------")
-    print get_month_add('2017-07-01',-1)
+    send_mail('chen_yu_qin_g@163.com')
 
 
 
