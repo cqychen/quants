@@ -254,29 +254,31 @@ def get_max_date_sz_margins():
     conn = pymysql.connect(user=user, passwd=passwd,host=iphost, db=db,charset=charset)
     return run_mysql_cmd(cmd, conn)[0][0]
 #发送邮件的函数 参数的意思分别是 发件人邮箱、收件人邮箱、主题、附件、消息内容
-def send_mail(fromAdd, toAdd, subject, attachfile, htmlText):
-  strFrom = fromAdd;
-  strTo = toAdd;
-  msg =MIMEText(htmlText);
-  msg['Content-Type'] = 'Text/HTML';
-  msg['Subject'] = Header(subject,'gb2312');
-  msg['To'] = strTo;
-  msg['From'] = strFrom;
-  #链接QQ邮箱服务器
-  smtp = smtplib.SMTP('smtp.qq.com');
-  #登录您的邮箱
-  smtp.login('1044605016@qq.com','qazwsxedc123');
-  try:
-    #执行发送
-    smtp.sendmail(strFrom,strTo,msg.as_string());
-  finally:
-    smtp.close;
+def send_mail(receivers,massage,subject):
+    mail_host="smtp.qq.com"        #设置服务器
+    mail_user="1044605016@qq.com"  #用户名
+    mail_pass="kodxwbptnxkpbbbb"   #口令,QQ邮箱是输入授权码，在qq邮箱设置 里用验证过的手机发送短信获得，不含空格
+    sender = '1044605016@qq.com'
 
+    message = MIMEText(massage, 'plain', 'utf-8')
+    message['Subject'] = Header(subject, 'utf-8')
+
+    smtpObj = smtplib.SMTP_SSL(mail_host, 465)
+    smtpObj.login(mail_user,mail_pass)
+    smtpObj.sendmail(sender, receivers, message.as_string())
+    smtpObj.quit()
+    print u"邮件发送成功"
 
 if __name__ == '__main__':
     #--------------------设置基本信息---------------------------------
     print("--------------main 函数测试-----------------------------")
-    send_mail('chen_yu_qin_g@163.com')
+    fin=open("schedule_scripts_orders",'rt')
+    massage=fin.readlines()
+    kk=""
+    for line in massage:
+        kk+=line
+    subject="本邮件由skyeye发送"
+    send_mail(receivers='chen_yu_qin_g@163.com',massage=kk,subject=subject)
 
 
 
