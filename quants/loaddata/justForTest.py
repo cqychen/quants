@@ -17,5 +17,5 @@ from common_function import  *
 
 import datetime
 import dateutil
-rs=ts.sz_margins(start='2015-01-01', end='2015-09-19')
+rs=ts.sz_margin_details('2015-04-20')
 print rs.head(10)

@@ -54,8 +54,8 @@ def load_data():
     tempnum = 1;
     for tmp_stock_code in stock_code:
         tempnum = tempnum + 1
-	print(tempnum,tmp_stock_code)
-	load_stock_tick(tmp_stock_code)
+        print(tempnum,tmp_stock_code)
+        load_stock_tick(tmp_stock_code)
 if __name__ == '__main__':
     #--------------------设置基本信息---------------------------------
     print("--------------加载股票日k线-----------------------------")

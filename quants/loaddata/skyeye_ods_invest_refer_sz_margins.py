@@ -35,6 +35,7 @@ def delete_data(start_date,end_date):
     cmd='''
     delete from %s WHERE opDate>='%s' and opDate<='%s'
     '''%(table_name,start_date,end_date)
+    print cmd
     run_mysql_cmd(cmd,conn)
 def load_data():
     start_date=get_date_add_days(get_max_date_sz_margins(),1)
