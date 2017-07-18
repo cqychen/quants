@@ -17,5 +17,6 @@ from common_function import  *
 
 import datetime
 import dateutil
-rs=ts.sz_margin_details('2015-04-20')
+rs=ts.get_report_data(2014,3)
+rs.fillna(0)
 print rs.head(10)
