@@ -17,6 +17,6 @@ from common_function import  *
 
 import datetime
 import dateutil
-rs=ts.get_report_data(2014,3)
-rs.fillna(0)
+rs=ts.get_cashflow_data(2017,1)
+rs=rs.fillna(0)
 print rs.head(10)

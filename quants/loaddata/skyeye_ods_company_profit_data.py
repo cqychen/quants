@@ -21,16 +21,14 @@ def create_table(table_name):
     create table if not exists %s
     (
     `code`           VARCHAR(10)  comment '股票代码'
-    ,`name`          VARCHAR(63)  comment '股票名称'
-    ,eps             double           comment '每股收益'
-    ,eps_yoy         double            comment '每股收益同比()'
-    ,bvps            double           comment '每股净资产'
-    ,roe             double            comment '净资产收益率()'
-    ,epcf            double            comment '每股现金流量(元)'
-    ,net_profits     double            comment '净利润(万元)'
-    ,profits_yoy     double            comment '净利润同比()'
-    ,distrib         varchar(63)       comment '分配方案'
-    ,`report_date`    VARCHAR(63)       comment '报告日期'
+    ,`name`          VARCHAR(63)  comment '股票名称' 
+    ,roe                    double  comment '净资产收益率'
+    ,net_profit_ratio       double  comment '净利率'
+    ,gross_profit_rate      double  comment '毛利率'
+    ,net_profits            double  comment '净利润'
+    ,eps                    double  comment '每股收益'
+    ,business_income        double  comment '营业收入'
+    ,bips                   double  comment '每股主营业务收入(元)'
     ,`year`          VARCHAR(63)       comment '业绩年份'
     ,`quarter`       VARCHAR(63)       comment '业绩季度'
     ,index(code)
@@ -43,14 +41,15 @@ def get_data_date(year,quarter):
     print cmd
     run_mysql_cmd(cmd=cmd,conn=conn) #先删除指定年和指定季度的数据
     try:
-        rs=ts.get_report_data(year=int(year),quarter=int(quarter))
+        rs=ts.get_profit_data(year=int(year),quarter=int(quarter))
         rs['year']=year
         rs['quarter']=quarter
         rs=rs.drop_duplicates() #去除重复的数据，没想到还有重复的，心塞塞，这个api不咋地啊，挖地兔
+
         pd.DataFrame.to_sql(rs, table_name, con=conn , flavor='mysql', if_exists='append',index=False)
         return rs
     except:
-        print("get data year=%s and quarter =%s wrong"%(year,quarter))
+        print("get data year=%s and quarter =%s wrong %s" % (year, quarter,table_name))
 def load_data():
     #下载公司基本信息，包括股票代码、pe、市盈率等数据
     max_year=int(get_max_year_table(table_name)) #还要获取前一年的情况
@@ -74,7 +73,7 @@ if __name__ == '__main__':
     iphost,user,passwd=get_mysql_conn()
     db='ods_data'
     charset='utf8'
-    table_name='ods_company_report_data'
+    table_name='ods_company_profit_data'
     conn = pymysql.connect(user=user, passwd=passwd,host=iphost, db=db,charset=charset)
     #--------------------脚本运行开始--------------------------------
     create_table(table_name=table_name) #建立表格
