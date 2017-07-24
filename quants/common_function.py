@@ -299,16 +299,52 @@ def get_max_date_sz_margins_detail():
     conn = pymysql.connect(user=user, passwd=passwd,host=iphost, db=db,charset=charset)
     return run_mysql_cmd(cmd, conn)[0][0]
 
+def get_closed_price(stock_code,date):
+    '''
+    :param stock_code:股票代码
+    :param date: 获取日期
+    :return:
+    '''
+    cmd='''
+    select `close`
+    from ods_tra_day_k
+    where `code`='%s'
+    and    date='%s'
+    '''%(stock_code,date)
+    iphost,user,passwd=get_mysql_conn()
+    db='ods_data'
+    charset='utf8'
+    conn = pymysql.connect(user=user, passwd=passwd,host=iphost, db=db,charset=charset)
+    rs=run_mysql_cmd(cmd=cmd,conn=conn)
+    if(len(rs)==0):
+        return 0
+    else:
+        return rs[0][0];
+
+
+def get_ratio_profit(stock_code,start_date,end_date):
+    '''
+    :param stock_code:股票代码
+    :param start_time: 买入日期
+    :param end_time: 卖出日期
+    :return: 赚取的利率
+    '''
+    if(cmp(start_date,end_date)>0):
+        return "please input the right date"
+    start_price=get_closed_price(stock_code=stock_code,date=start_date)
+    end_price=get_closed_price(stock_code=stock_code,date=end_date)
+    if(start_price>0 and end_price>0 ):
+        return (end_price-start_price)/float(start_price)
+    else:
+        return "please input the right date"
+
 if __name__ == '__main__':
     #--------------------设置基本信息---------------------------------
     print("--------------main 函数测试-----------------------------")
-    fin=open("schedule_scripts_orders",'rt')
-    massage=fin.readlines()
-    kk=""
-    for line in massage:
-        kk+=line
-    subject="本邮件由skyeye发送"
-    send_mail(receivers='chen_yu_qin_g@163.com',massage=kk,subject=subject)
+    print get_ratio_profit(stock_code='000001',start_date='2005-06-23',end_date='2017-07-19')
+
+
+
 
 
 
