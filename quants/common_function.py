@@ -10,31 +10,30 @@ from sqlalchemy import create_engine
 from pandas.io import sql
 import threading
 import pandas as pd;
-import commands
+#import commands
 import dateutil
 import smtplib
 from email.mime.text import MIMEText
 from email.header import Header
+from urllib import parse
+
 
 def get_mysql_conn():
     '''
     :return:返回数据库链接信息 
     '''
-    iphost='114.215.165.196'
-    user='skyeye'
-    passwd='QWEqwe123!@#'
-    return iphost,user,passwd
+    connstr = "mysql+pymysql://skyeye:%s@127.0.0.1:3306/ods_data?charset=utf8" % parse.quote_plus('QWEqwe123!@#')
+    con = create_engine(connstr, echo=True, max_overflow=5);
+    return con
+
 def get_stock_info():
     '''
     从companyclassified中提取股票信息，这个表会每天进行更新，以获取最新的数据
     包括股票代码，上市日期，市盈率等信息
     '''
     sql_str="SELECT *  FROM  ods_data.`ods_company_basic_info`"
-    iphost, user, passwd = get_mysql_conn()
-    db='ods_data'
-    charset='utf8'
-    conn = pymysql.connect(user=user, passwd=passwd,host=iphost, db=db,charset=charset)
-    rs=sql.read_sql_query(sql=sql_str, con=conn, index_col='code', coerce_float=True)
+    con=get_mysql_conn()
+    rs=sql.read_sql_query(sql=sql_str, con=con, index_col='code', coerce_float=True)
     return rs
 def get_index_info():
     '''
@@ -267,7 +266,7 @@ def send_mail(receivers,massage,subject):
     smtpObj.login(mail_user,mail_pass)
     smtpObj.sendmail(sender, receivers, message.as_string())
     smtpObj.quit()
-    print u"邮件发送成功"
+    print ("邮件发送成功")
 
 def get_max_date_sh_margins_detail(stock_code):
     '''
@@ -341,7 +340,7 @@ def get_ratio_profit(stock_code,start_date,end_date):
 if __name__ == '__main__':
     #--------------------设置基本信息---------------------------------
     print("--------------main 函数测试-----------------------------")
-    print get_ratio_profit(stock_code='000001',start_date='2005-06-23',end_date='2017-07-19')
+    print (get_ratio_profit(stock_code='000001',start_date='2005-06-23',end_date='2017-07-19'))
 
 
 

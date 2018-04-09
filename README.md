@@ -1,6 +1,7 @@
 股票量化投资  
 
-本项目包含五个部分  
+本项目包含五个部分  ,采用airflow 调度系统进行调度。
+
 
 1）数据获取  
 
@@ -8,6 +9,7 @@
 包括交易数据、公司基本信息、公司盈利等情况  
 后面会采用深度学习进行舆情分析
 
+![Alt text](https://github.com/cqychen/quants/raw/master/documents/data.png)
 
 2）数据处理  
 

@@ -14,25 +14,26 @@ import pandas as pd;
 import sys
 sys.path.append('../') #添加配置文件
 from common_function import  *
+from sqlalchemy.types import VARCHAR
+
 
 def load_data():
     #下载公司基本信息，包括股票代码、pe、市盈率等数据
     try:
         rs=ts.get_stock_basics()
-        pd.DataFrame.to_sql(rs, "ods_company_basic_info", con=conn , flavor='mysql', if_exists='replace',index=True)
+        pd.DataFrame.to_sql(rs, name="ods_company_basic_info", con=con ,schema=db, if_exists='replace',index=True,dtype={'code': VARCHAR(rs.index.get_level_values('code').str.len().max())})
         print("公司基本信息数据ok")
-    except:
+    except Exception as e:
+        print(e)
         print("公司基本信息数据出错")
 
 if __name__ == '__main__':
     #--------------------设置基本信息---------------------------------
     print("--------------加载公司基本信息开始-----------------------------")
     startTime=dt.time()
-    iphost,user,passwd=get_mysql_conn()
+    con=get_mysql_conn()
     db='ods_data'
-    charset='utf8'
     table_name='ods_company_basic_info'
-    conn = pymysql.connect(user=user, passwd=passwd,host=iphost, db=db,charset=charset)
     #--------------------脚本运行开始--------------------------------
     load_data()
     endTime=dt.time()

@@ -17,4 +17,4 @@ from common_function import  *
 import datetime
 import dateutil
 
-print "start to go"
+print ("start to go")
