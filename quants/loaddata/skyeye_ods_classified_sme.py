@@ -18,20 +18,18 @@ from common_function import  *
 def load_data():
     try:
         rs=ts.get_sme_classified()
-        pd.DataFrame.to_sql(rs, table_name, con=conn , flavor='mysql', if_exists='replace',index=True)
+        pd.DataFrame.to_sql(rs, name=table_name, con=con , schema=db, if_exists='replace',index=True)
     except Exception as e:
-        print(e.message)
+        print(e)
         print("公司地域分类信息数据出错")
 
 if __name__ == '__main__':
     #--------------------设置基本信息---------------------------------
     print("--------------加载公司地域分类信息开始-----------------------------")
     startTime=dt.time()
-    iphost,user,passwd=get_mysql_conn()
+    con=get_mysql_conn()
     db='ods_data'
-    charset='utf8'
     table_name='ods_classified_sme'
-    conn = pymysql.connect(user=user, passwd=passwd,host=iphost, db=db,charset=charset)
     #--------------------脚本运行开始--------------------------------
     load_data()
     endTime=dt.time()
